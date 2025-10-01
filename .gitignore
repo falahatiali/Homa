@@ -7,3 +7,7 @@ Thumbs.db
 /.idea
 /.vscode
 packages-lock.json
+
+# Testing directory (contains API keys)
+/test/
+.env

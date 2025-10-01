@@ -132,8 +132,10 @@ class GrokProvider implements AIProviderInterface
         } catch (\TypeError $e) {
             // Handle the Grok client library bug where it passes array instead of string
             if (str_contains($e->getMessage(), 'GrokException::__construct()')) {
+                // Try to get more specific error information
+                $errorDetails = $this->getDetailedErrorInfo($e);
                 throw new AIException(
-                    "Grok AI Error: Invalid API key or request format",
+                    "Grok AI Error: {$errorDetails}",
                     400,
                     $e
                 );
@@ -225,6 +227,68 @@ class GrokProvider implements AIProviderInterface
     public function validateConfig(): bool
     {
         return ! empty($this->config['api_key']);
+    }
+
+    /**
+     * Validate API key format and provide detailed feedback.
+     */
+    public function validateApiKey(): array
+    {
+        $apiKey = $this->config['api_key'] ?? '';
+        
+        if (empty($apiKey)) {
+            return [
+                'valid' => false,
+                'error' => 'No API key provided',
+                'suggestion' => 'Please set GROK_API_KEY in your environment or config'
+            ];
+        }
+        
+        if (!str_starts_with($apiKey, 'xai-')) {
+            return [
+                'valid' => false,
+                'error' => 'Invalid API key format',
+                'suggestion' => 'Grok API keys should start with "xai-". Get your key from https://console.x.ai'
+            ];
+        }
+        
+        if (strlen($apiKey) < 20) {
+            return [
+                'valid' => false,
+                'error' => 'API key too short',
+                'suggestion' => 'Please check your Grok API key - it should be longer'
+            ];
+        }
+        
+        return [
+            'valid' => true,
+            'message' => 'API key format looks correct',
+            'prefix' => substr($apiKey, 0, 10) . '...'
+        ];
+    }
+
+    /**
+     * Get detailed error information for better debugging.
+     */
+    protected function getDetailedErrorInfo(\TypeError $e): string
+    {
+        $apiKey = $this->config['api_key'] ?? 'not-set';
+        $apiKeyPrefix = substr($apiKey, 0, 10);
+        
+        // Check if API key format is correct
+        if (empty($apiKey) || $apiKey === 'not-set') {
+            return "No API key provided. Please set GROK_API_KEY in your environment.";
+        }
+        
+        if (!str_starts_with($apiKey, 'xai-')) {
+            return "Invalid API key format. Grok API keys should start with 'xai-'. Got: {$apiKeyPrefix}...";
+        }
+        
+        if (strlen($apiKey) < 20) {
+            return "API key appears to be too short. Please check your Grok API key.";
+        }
+        
+        return "API key format looks correct ({$apiKeyPrefix}...), but request failed. This could be due to: 1) Invalid API key, 2) Insufficient credits, 3) API endpoint issues, or 4) Rate limiting.";
     }
 
     /**
