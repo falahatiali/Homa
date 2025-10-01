@@ -5,6 +5,7 @@ namespace Homa\Factories;
 use Homa\Contracts\AIProviderInterface;
 use Homa\Exceptions\ConfigurationException;
 use Homa\Providers\AnthropicProvider;
+use Homa\Providers\GrokProvider;
 use Homa\Providers\OpenAIProvider;
 use InvalidArgumentException;
 
@@ -22,6 +23,7 @@ class ProviderFactory
     protected array $providers = [
         'openai' => OpenAIProvider::class,
         'anthropic' => AnthropicProvider::class,
+        'grok' => GrokProvider::class,
     ];
 
     /**

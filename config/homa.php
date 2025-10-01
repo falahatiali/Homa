@@ -10,7 +10,7 @@ return [
     | This option controls the default AI provider that will be used by the
     | package. You can change this to any of the supported providers below.
     |
-    | Supported: "openai", "anthropic"
+    | Supported: "openai", "anthropic", "grok"
     |
     */
 
@@ -43,6 +43,13 @@ return [
             'temperature' => env('ANTHROPIC_TEMPERATURE', 0.7),
             'max_tokens' => env('ANTHROPIC_MAX_TOKENS', 1000),
             'timeout' => env('ANTHROPIC_TIMEOUT', 30),
+        ],
+
+        'grok' => [
+            'api_key' => env('GROK_API_KEY'),
+            'model' => env('GROK_MODEL', 'grok-2'),
+            'temperature' => env('GROK_TEMPERATURE', 0.7),
+            'max_tokens' => env('GROK_MAX_TOKENS', 1000),
         ],
     ],
 
