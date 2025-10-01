@@ -1,6 +1,16 @@
-# Homa 🦅
+<div align="center">
+  <img src=".github/images/homa-logo.png" alt="Homa - The legendary bird" width="200">
+  
+  # Homa 🦅
+  
+  **The legendary bird that brings AI wisdom to Laravel.**
+  
+  [![Latest Version](https://img.shields.io/packagist/v/falahatiali/homa.svg?style=flat-square)](https://packagist.org/packages/falahatiali/homa)
+  [![Total Downloads](https://img.shields.io/packagist/dt/falahatiali/homa.svg?style=flat-square)](https://packagist.org/packages/falahatiali/homa)
+  [![License](https://img.shields.io/packagist/l/falahatiali/homa.svg?style=flat-square)](https://packagist.org/packages/falahatiali/homa)
+</div>
 
-**The legendary bird that brings AI wisdom to Laravel.**
+---
 
 Homa is a simple and elegant AI assistant package for Laravel applications. Integrate multiple AI providers (OpenAI, Anthropic, etc.) with a clean, fluent API. Named after the mythical Persian bird that brings good fortune and wisdom.
 
