@@ -40,6 +40,24 @@ class RequestOptions implements JsonSerializable
     }
 
     /**
+     * Create from an array.
+     */
+    public static function fromArray(array $options): self
+    {
+        return new self(
+            model: $options['model'] ?? null,
+            temperature: $options['temperature'] ?? null,
+            maxTokens: $options['max_tokens'] ?? null,
+            stream: $options['stream'] ?? null,
+            topP: $options['top_p'] ?? null,
+            n: $options['n'] ?? null,
+            stop: $options['stop'] ?? null,
+            presencePenalty: $options['presence_penalty'] ?? null,
+            frequencyPenalty: $options['frequency_penalty'] ?? null
+        );
+    }
+
+    /**
      * Create options with only model specified.
      */
     public static function withModel(string $model): self

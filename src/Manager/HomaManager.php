@@ -7,6 +7,9 @@ use Homa\Conversation\Conversation;
 use Homa\Exceptions\ConfigurationException;
 use Homa\Factories\ProviderFactory;
 use Homa\Response\AIResponse;
+use Homa\ValueObjects\Message;
+use Homa\ValueObjects\MessageCollection;
+use Homa\ValueObjects\RequestOptions;
 
 /**
  * Main manager for Homa AI package.
@@ -40,6 +43,7 @@ class HomaManager
      * Set the AI provider.
      *
      * @return $this
+     *
      * @throws ConfigurationException
      */
     public function provider(string $provider): self
@@ -130,8 +134,10 @@ class HomaManager
 
     /**
      * Send a chat message with full control.
+     *
+     * Accepts strings, arrays, or MessageCollection for flexibility.
      */
-    public function chat(string|array $messages): AIResponse
+    public function chat(string|array|MessageCollection $messages): AIResponse
     {
         if (is_string($messages)) {
             $messages = [
@@ -140,6 +146,30 @@ class HomaManager
         }
 
         return $this->getProvider()->sendMessage($messages, $this->config);
+    }
+
+    /**
+     * Send a message using Value Objects (type-safe).
+     *
+     * For developers who prefer strongly-typed code with IDE support.
+     */
+    public function send(MessageCollection $messages, ?RequestOptions $options = null): AIResponse
+    {
+        $mergedOptions = $options
+            ? RequestOptions::fromArray(array_merge($this->config, $options->toArray()))
+            : RequestOptions::fromArray($this->config);
+
+        return $this->getProvider()->sendMessage($messages, $mergedOptions);
+    }
+
+    /**
+     * Create a RequestOptions instance from current configuration.
+     *
+     * Useful for building type-safe requests.
+     */
+    public function getRequestOptions(): RequestOptions
+    {
+        return RequestOptions::fromArray($this->config);
     }
 
     /**
