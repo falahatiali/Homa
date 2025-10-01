@@ -4,6 +4,7 @@ namespace Homa\Manager;
 
 use Homa\Contracts\AIProviderInterface;
 use Homa\Conversation\Conversation;
+use Homa\Exceptions\ConfigurationException;
 use Homa\Factories\ProviderFactory;
 use Homa\Response\AIResponse;
 
@@ -33,13 +34,13 @@ class HomaManager
      */
     public function __construct(
         protected ProviderFactory $factory
-    ) {
-    }
+    ) {}
 
     /**
      * Set the AI provider.
      *
-     * @return  $this
+     * @return $this
+     * @throws ConfigurationException
      */
     public function provider(string $provider): self
     {
@@ -51,7 +52,7 @@ class HomaManager
     /**
      * Set the model to use.
      *
-     * @return  $this
+     * @return $this
      */
     public function model(string $model): self
     {
@@ -64,7 +65,7 @@ class HomaManager
     /**
      * Set the temperature.
      *
-     * @return  $this
+     * @return $this
      */
     public function temperature(float $temperature): self
     {
@@ -77,7 +78,7 @@ class HomaManager
     /**
      * Set the max tokens.
      *
-     * @return  $this
+     * @return $this
      */
     public function maxTokens(int $maxTokens): self
     {
@@ -90,7 +91,7 @@ class HomaManager
     /**
      * Set the system prompt.
      *
-     * @return  $this
+     * @return $this
      */
     public function systemPrompt(string $prompt): self
     {

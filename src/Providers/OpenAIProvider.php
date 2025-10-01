@@ -105,7 +105,7 @@ class OpenAIProvider implements AIProviderInterface
     /**
      * Set the model.
      *
-     * @return  $this
+     * @return $this
      */
     public function setModel(string $model): self
     {
@@ -117,7 +117,7 @@ class OpenAIProvider implements AIProviderInterface
     /**
      * Set the temperature.
      *
-     * @return  $this
+     * @return $this
      */
     public function setTemperature(float $temperature): self
     {
@@ -129,7 +129,7 @@ class OpenAIProvider implements AIProviderInterface
     /**
      * Set the max tokens.
      *
-     * @return  $this
+     * @return $this
      */
     public function setMaxTokens(int $maxTokens): self
     {

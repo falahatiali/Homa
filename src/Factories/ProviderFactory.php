@@ -43,7 +43,7 @@ class ProviderFactory
         if (empty($config['api_key'])) {
             throw new ConfigurationException(
                 "API key is required for provider [{$provider}]. ".
-                "Please set it in your configuration or environment variables."
+                'Please set it in your configuration or environment variables.'
             );
         }
 
@@ -61,7 +61,7 @@ class ProviderFactory
     {
         if (! is_subclass_of($providerClass, AIProviderInterface::class)) {
             throw new InvalidArgumentException(
-                "Provider class must implement AIProviderInterface."
+                'Provider class must implement AIProviderInterface.'
             );
         }
 
@@ -94,4 +94,3 @@ class ProviderFactory
         return array_keys($this->providers);
     }
 }
-
