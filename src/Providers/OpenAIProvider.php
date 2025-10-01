@@ -5,6 +5,8 @@ namespace Homa\Providers;
 use Homa\Contracts\AIProviderInterface;
 use Homa\Exceptions\AIException;
 use Homa\Response\AIResponse;
+use Homa\ValueObjects\MessageCollection;
+use Homa\ValueObjects\RequestOptions;
 use OpenAI;
 use OpenAI\Client;
 
@@ -64,16 +66,31 @@ class OpenAIProvider implements AIProviderInterface
     /**
      * Send a message to OpenAI.
      *
+     * Supports both Value Objects and arrays for backward compatibility.
+     *
+     *
      * @throws AIException
      */
-    public function sendMessage(array $messages, array $options = []): AIResponse
+    public function sendMessage(MessageCollection|array $messages, RequestOptions|array|null $options = null): AIResponse
     {
+        // Normalize messages to array
+        $messagesArray = $messages instanceof MessageCollection
+            ? $messages->toArray()
+            : $messages;
+
+        // Normalize options to array
+        $optionsArray = match (true) {
+            $options instanceof RequestOptions => $options->toArray(),
+            is_array($options) => $options,
+            default => [],
+        };
+
         try {
             $response = $this->client->chat()->create([
-                'model' => $options['model'] ?? $this->model,
-                'messages' => $messages,
-                'temperature' => $options['temperature'] ?? $this->temperature,
-                'max_tokens' => $options['max_tokens'] ?? $this->maxTokens,
+                'model' => $optionsArray['model'] ?? $this->model,
+                'messages' => $messagesArray,
+                'temperature' => $optionsArray['temperature'] ?? $this->temperature,
+                'max_tokens' => $optionsArray['max_tokens'] ?? $this->maxTokens,
             ]);
 
             return new AIResponse(

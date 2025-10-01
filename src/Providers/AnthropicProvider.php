@@ -7,6 +7,8 @@ use GuzzleHttp\Exception\GuzzleException;
 use Homa\Contracts\AIProviderInterface;
 use Homa\Exceptions\AIException;
 use Homa\Response\AIResponse;
+use Homa\ValueObjects\MessageCollection;
+use Homa\ValueObjects\RequestOptions;
 
 class AnthropicProvider implements AIProviderInterface
 {
@@ -59,16 +61,31 @@ class AnthropicProvider implements AIProviderInterface
     /**
      * Send a message to Anthropic.
      *
+     * Supports both Value Objects and arrays for backward compatibility.
+     *
+     *
      * @throws AIException
      */
-    public function sendMessage(array $messages, array $options = []): AIResponse
+    public function sendMessage(MessageCollection|array $messages, RequestOptions|array|null $options = null): AIResponse
     {
+        // Normalize messages to array
+        $messagesArray = $messages instanceof MessageCollection
+            ? $messages->toArray()
+            : $messages;
+
+        // Normalize options to array
+        $optionsArray = match (true) {
+            $options instanceof RequestOptions => $options->toArray(),
+            is_array($options) => $options,
+            default => [],
+        };
+
         try {
             // Anthropic API requires system message to be separate
             $systemMessage = null;
             $conversationMessages = [];
 
-            foreach ($messages as $message) {
+            foreach ($messagesArray as $message) {
                 if ($message['role'] === 'system') {
                     $systemMessage = $message['content'];
                 } else {
@@ -77,10 +94,10 @@ class AnthropicProvider implements AIProviderInterface
             }
 
             $payload = [
-                'model' => $options['model'] ?? $this->model,
+                'model' => $optionsArray['model'] ?? $this->model,
                 'messages' => $conversationMessages,
-                'temperature' => $options['temperature'] ?? $this->temperature,
-                'max_tokens' => $options['max_tokens'] ?? $this->maxTokens,
+                'temperature' => $optionsArray['temperature'] ?? $this->temperature,
+                'max_tokens' => $optionsArray['max_tokens'] ?? $this->maxTokens,
             ];
 
             if ($systemMessage) {
