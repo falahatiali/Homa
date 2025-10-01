@@ -22,7 +22,7 @@ Homa is a simple and elegant AI assistant package for Laravel applications. Inte
 - 🔌 **Multiple AI Providers** - Support for OpenAI (GPT-4, GPT-3.5) and Anthropic (Claude)
 - 💬 **Conversation Management** - Built-in context-aware multi-turn conversations
 - ⚙️ **Highly Configurable** - Extensive configuration options for every use case
-- 🧪 **Fully Tested** - Comprehensive test suite with CI/CD pipeline
+- 🧪 **Fully Tested** - 70 tests with 135 assertions covering all critical paths
 - 📦 **Zero Configuration** - Works out of the box with sensible defaults
 - 🎯 **Extensible** - Easy to add custom AI providers via Factory Pattern
 - 🔒 **Type Safe** - Full PHP 8.1+ type hints and return types
