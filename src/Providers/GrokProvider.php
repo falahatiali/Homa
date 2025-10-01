@@ -92,15 +92,8 @@ class GrokProvider implements AIProviderInterface
         };
 
         try {
-            // Prepare chat options
-            $chatOptions = new ChatOptions(
-                model: $this->getGrokModel($optionsArray['model'] ?? $this->model),
-                temperature: $optionsArray['temperature'] ?? $this->temperature,
-                stream: $optionsArray['stream'] ?? false
-            );
-
-            // Send request to Grok
-            $response = $this->client->chat($messagesArray, $chatOptions);
+            // Use direct HTTP request to bypass the buggy client library
+            $response = $this->makeDirectRequest($messagesArray, $optionsArray);
 
             // Parse the response correctly
             $content = '';
@@ -268,6 +261,62 @@ class GrokProvider implements AIProviderInterface
     }
 
     /**
+     * Make direct HTTP request to Grok API (bypassing buggy client library).
+     */
+    protected function makeDirectRequest(array $messages, array $options): array
+    {
+        $url = 'https://api.x.ai/v1/chat/completions';
+        
+        $data = [
+            'messages' => $messages,
+            'model' => $options['model'] ?? $this->model,
+            'stream' => $options['stream'] ?? false,
+            'temperature' => $options['temperature'] ?? $this->temperature,
+        ];
+        
+        // Add max_tokens if specified
+        if (isset($options['max_tokens']) || isset($this->maxTokens)) {
+            $data['max_tokens'] = $options['max_tokens'] ?? $this->maxTokens;
+        }
+        
+        $headers = [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $this->config['api_key']
+        ];
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $error = curl_error($ch);
+        curl_close($ch);
+        
+        if ($error) {
+            throw new AIException("cURL Error: $error", 0);
+        }
+        
+        if ($httpCode !== 200) {
+            $errorData = json_decode($response, true);
+            $errorMessage = $errorData['error']['message'] ?? "HTTP $httpCode error";
+            throw new AIException("Grok API Error: $errorMessage", $httpCode);
+        }
+        
+        $responseData = json_decode($response, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new AIException("Invalid JSON response from Grok API", 0);
+        }
+        
+        return $responseData;
+    }
+
+    /**
      * Get detailed error information for better debugging.
      */
     protected function getDetailedErrorInfo(\TypeError $e): string
@@ -305,6 +354,9 @@ class GrokProvider implements AIProviderInterface
             'grok-2-vision-1212' => Model::GROK_2_VISION_1212,
             'grok-vision-beta' => Model::GROK_VISION_BETA,
             'grok-beta' => Model::GROK_BETA,
+            // Handle newer models that might not be in the enum yet
+            'grok-4' => Model::GROK_2_LATEST, // Fallback to latest available
+            'grok-4-0709' => Model::GROK_2_LATEST, // Fallback to latest available
             default => Model::GROK_2,
         };
     }
