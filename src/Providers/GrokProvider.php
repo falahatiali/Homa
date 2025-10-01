@@ -102,15 +102,46 @@ class GrokProvider implements AIProviderInterface
             // Send request to Grok
             $response = $this->client->chat($messagesArray, $chatOptions);
 
-            return new AIResponse(
-                content: $response['choices'][0]['message']['content'] ?? '',
-                model: $response['model'] ?? $this->model,
-                usage: [
+            // Parse the response correctly
+            $content = '';
+            $model = $this->model;
+            $usage = ['prompt_tokens' => 0, 'completion_tokens' => 0, 'total_tokens' => 0];
+
+            if (isset($response['choices'][0]['message']['content'])) {
+                $content = $response['choices'][0]['message']['content'];
+            }
+
+            if (isset($response['model'])) {
+                $model = $response['model'];
+            }
+
+            if (isset($response['usage'])) {
+                $usage = [
                     'prompt_tokens' => $response['usage']['prompt_tokens'] ?? 0,
                     'completion_tokens' => $response['usage']['completion_tokens'] ?? 0,
                     'total_tokens' => $response['usage']['total_tokens'] ?? 0,
-                ],
+                ];
+            }
+
+            return new AIResponse(
+                content: $content,
+                model: $model,
+                usage: $usage,
                 raw: $response
+            );
+        } catch (\TypeError $e) {
+            // Handle the Grok client library bug where it passes array instead of string
+            if (str_contains($e->getMessage(), 'GrokException::__construct()')) {
+                throw new AIException(
+                    "Grok AI Error: Invalid API key or request format",
+                    400,
+                    $e
+                );
+            }
+            throw new AIException(
+                "Grok AI Error: {$e->getMessage()}",
+                0,
+                $e
             );
         } catch (GrokException $e) {
             // Wrap Grok exceptions into our exception type
@@ -162,6 +193,30 @@ class GrokProvider implements AIProviderInterface
         $this->maxTokens = $maxTokens;
 
         return $this;
+    }
+
+    /**
+     * Get the current model.
+     */
+    public function getModel(): string
+    {
+        return $this->model;
+    }
+
+    /**
+     * Get the current temperature.
+     */
+    public function getTemperature(): float
+    {
+        return $this->temperature;
+    }
+
+    /**
+     * Get the current max tokens.
+     */
+    public function getMaxTokens(): int
+    {
+        return $this->maxTokens;
     }
 
     /**
