@@ -73,4 +73,3 @@ class AIResponseTest extends TestCase
         $this->assertEquals('Hello', $decoded['content']);
     }
 }
-

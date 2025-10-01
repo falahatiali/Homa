@@ -6,4 +6,3 @@ class ConfigurationException extends AIException
 {
     //
 }
-

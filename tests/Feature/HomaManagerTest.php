@@ -45,4 +45,3 @@ class HomaManagerTest extends TestCase
         $this->assertInstanceOf(HomaManager::class, $result);
     }
 }
-

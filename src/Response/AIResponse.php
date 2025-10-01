@@ -6,39 +6,26 @@ class AIResponse
 {
     /**
      * The response content.
-     *
-     * @var string
      */
     protected string $content;
 
     /**
      * The model used for the response.
-     *
-     * @var string|null
      */
     protected ?string $model;
 
     /**
      * Usage statistics.
-     *
-     * @var array
      */
     protected array $usage;
 
     /**
      * Raw response data.
-     *
-     * @var array
      */
     protected array $raw;
 
     /**
      * Create a new AI Response instance.
-     *
-     * @param string $content
-     * @param string|null $model
-     * @param array $usage
-     * @param array $raw
      */
     public function __construct(string $content, ?string $model = null, array $usage = [], array $raw = [])
     {
@@ -50,8 +37,6 @@ class AIResponse
 
     /**
      * Get the response content.
-     *
-     * @return string
      */
     public function content(): string
     {
@@ -60,8 +45,6 @@ class AIResponse
 
     /**
      * Get the model used.
-     *
-     * @return string|null
      */
     public function model(): ?string
     {
@@ -70,8 +53,6 @@ class AIResponse
 
     /**
      * Get usage statistics.
-     *
-     * @return array
      */
     public function usage(): array
     {
@@ -80,8 +61,6 @@ class AIResponse
 
     /**
      * Get raw response data.
-     *
-     * @return array
      */
     public function raw(): array
     {
@@ -90,8 +69,6 @@ class AIResponse
 
     /**
      * Get the response as a string.
-     *
-     * @return string
      */
     public function __toString(): string
     {
@@ -100,8 +77,6 @@ class AIResponse
 
     /**
      * Convert the response to an array.
-     *
-     * @return array
      */
     public function toArray(): array
     {
@@ -114,9 +89,6 @@ class AIResponse
 
     /**
      * Convert the response to JSON.
-     *
-     * @param int $options
-     * @return string
      */
     public function toJson(int $options = 0): string
     {

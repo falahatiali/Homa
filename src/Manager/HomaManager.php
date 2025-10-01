@@ -2,115 +2,105 @@
 
 namespace Homa\Manager;
 
-use Illuminate\Foundation\Application;
-use InvalidArgumentException;
 use Homa\Contracts\AIProviderInterface;
-use Homa\Providers\AnthropicProvider;
-use Homa\Providers\OpenAIProvider;
-use Homa\Response\AIResponse;
 use Homa\Conversation\Conversation;
+use Homa\Factories\ProviderFactory;
+use Homa\Response\AIResponse;
 
+/**
+ * Main manager for Homa AI package.
+ *
+ * Implements Facade Pattern for simple API.
+ * Uses Dependency Injection for testability.
+ * Follows Single Responsibility Principle.
+ */
 class HomaManager
 {
     /**
-     * The application instance.
-     *
-     * @var Application
-     */
-    protected Application $app;
-
-    /**
      * The active provider instance.
-     *
-     * @var AIProviderInterface|null
      */
     protected ?AIProviderInterface $provider = null;
 
     /**
      * Custom configuration for this instance.
-     *
-     * @var array
      */
     protected array $config = [];
 
     /**
      * Create a new Homa Manager instance.
      *
-     * @param Application $app
+     * @param  ProviderFactory  $factory  Injected factory (Dependency Inversion)
      */
-    public function __construct(Application $app)
-    {
-        $this->app = $app;
+    public function __construct(
+        protected ProviderFactory $factory
+    ) {
     }
 
     /**
      * Set the AI provider.
      *
-     * @param string $provider
-     * @return $this
+     * @return  $this
      */
     public function provider(string $provider): self
     {
-        $this->provider = $this->createProvider($provider);
+        $this->provider = $this->factory->make($provider);
+
         return $this;
     }
 
     /**
      * Set the model to use.
      *
-     * @param string $model
-     * @return $this
+     * @return  $this
      */
     public function model(string $model): self
     {
         $this->config['model'] = $model;
         $this->getProvider()->setModel($model);
+
         return $this;
     }
 
     /**
      * Set the temperature.
      *
-     * @param float $temperature
-     * @return $this
+     * @return  $this
      */
     public function temperature(float $temperature): self
     {
         $this->config['temperature'] = $temperature;
         $this->getProvider()->setTemperature($temperature);
+
         return $this;
     }
 
     /**
      * Set the max tokens.
      *
-     * @param int $maxTokens
-     * @return $this
+     * @return  $this
      */
     public function maxTokens(int $maxTokens): self
     {
         $this->config['max_tokens'] = $maxTokens;
         $this->getProvider()->setMaxTokens($maxTokens);
+
         return $this;
     }
 
     /**
      * Set the system prompt.
      *
-     * @param string $prompt
-     * @return $this
+     * @return  $this
      */
     public function systemPrompt(string $prompt): self
     {
         $this->config['system_prompt'] = $prompt;
+
         return $this;
     }
 
     /**
      * Ask a simple question.
-     *
-     * @param string $question
-     * @return AIResponse
      */
     public function ask(string $question): AIResponse
     {
@@ -139,9 +129,6 @@ class HomaManager
 
     /**
      * Send a chat message with full control.
-     *
-     * @param string|array $messages
-     * @return AIResponse
      */
     public function chat(string|array $messages): AIResponse
     {
@@ -156,8 +143,6 @@ class HomaManager
 
     /**
      * Start a new conversation.
-     *
-     * @return Conversation
      */
     public function startConversation(): Conversation
     {
@@ -167,38 +152,23 @@ class HomaManager
     /**
      * Get the active provider instance.
      *
-     * @return AIProviderInterface
+     * Lazy loading pattern - creates provider only when needed.
      */
     protected function getProvider(): AIProviderInterface
     {
-        if (!$this->provider) {
+        if (! $this->provider) {
             $defaultProvider = config('homa.default', 'openai');
-            $this->provider = $this->createProvider($defaultProvider);
+            $this->provider = $this->factory->make($defaultProvider);
         }
 
         return $this->provider;
     }
 
     /**
-     * Create a provider instance.
-     *
-     * @param string $provider
-     * @return AIProviderInterface
-     * @throws InvalidArgumentException
+     * Get list of available providers.
      */
-    protected function createProvider(string $provider): AIProviderInterface
+    public function availableProviders(): array
     {
-        $config = config("homa.providers.{$provider}");
-
-        if (!$config) {
-            throw new InvalidArgumentException("Provider [{$provider}] is not configured.");
-        }
-
-        return match ($provider) {
-            'openai' => new OpenAIProvider($config),
-            'anthropic' => new AnthropicProvider($config),
-            default => throw new InvalidArgumentException("Provider [{$provider}] is not supported."),
-        };
+        return $this->factory->getAvailableProviders();
     }
 }
-

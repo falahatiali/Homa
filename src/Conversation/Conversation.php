@@ -9,30 +9,21 @@ class Conversation
 {
     /**
      * The AI provider instance.
-     *
-     * @var AIProviderInterface
      */
     protected AIProviderInterface $provider;
 
     /**
      * The conversation messages.
-     *
-     * @var array
      */
     protected array $messages = [];
 
     /**
      * Configuration options.
-     *
-     * @var array
      */
     protected array $config;
 
     /**
      * Create a new Conversation instance.
-     *
-     * @param AIProviderInterface $provider
-     * @param array $config
      */
     public function __construct(AIProviderInterface $provider, array $config = [])
     {
@@ -55,9 +46,6 @@ class Conversation
 
     /**
      * Add a user message and get a response.
-     *
-     * @param string $message
-     * @return AIResponse
      */
     public function ask(string $message): AIResponse
     {
@@ -79,7 +67,6 @@ class Conversation
     /**
      * Add a system message to the conversation.
      *
-     * @param string $message
      * @return $this
      */
     public function system(string $message): self
@@ -94,8 +81,6 @@ class Conversation
 
     /**
      * Get all messages in the conversation.
-     *
-     * @return array
      */
     public function getMessages(): array
     {
@@ -110,18 +95,17 @@ class Conversation
     public function clear(): self
     {
         $this->messages = [];
+
         return $this;
     }
 
     /**
      * Get the conversation history as a string.
-     *
-     * @return string
      */
     public function history(): string
     {
         return collect($this->messages)
-            ->map(fn($msg) => "{$msg['role']}: {$msg['content']}")
+            ->map(fn ($msg) => "{$msg['role']}: {$msg['content']}")
             ->implode("\n\n");
     }
 }

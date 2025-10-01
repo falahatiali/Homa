@@ -12,43 +12,31 @@ class AnthropicProvider implements AIProviderInterface
 {
     /**
      * The HTTP client instance.
-     *
-     * @var Client
      */
     protected Client $client;
 
     /**
      * Provider configuration.
-     *
-     * @var array
      */
     protected array $config;
 
     /**
      * The model to use.
-     *
-     * @var string
      */
     protected string $model;
 
     /**
      * The temperature setting.
-     *
-     * @var float
      */
     protected float $temperature;
 
     /**
      * The max tokens setting.
-     *
-     * @var int
      */
     protected int $maxTokens;
 
     /**
      * Create a new Anthropic Provider instance.
-     *
-     * @param array $config
      */
     public function __construct(array $config)
     {
@@ -71,9 +59,6 @@ class AnthropicProvider implements AIProviderInterface
     /**
      * Send a message to Anthropic.
      *
-     * @param array $messages
-     * @param array $options
-     * @return AIResponse
      * @throws AIException
      */
     public function sendMessage(array $messages, array $options = []): AIResponse
@@ -115,55 +100,53 @@ class AnthropicProvider implements AIProviderInterface
                 raw: $data
             );
         } catch (GuzzleException $e) {
-            throw new AIException("Anthropic API Error: " . $e->getMessage(), $e->getCode(), $e);
+            throw new AIException('Anthropic API Error: '.$e->getMessage(), $e->getCode(), $e);
         } catch (\Exception $e) {
-            throw new AIException("Error processing Anthropic response: " . $e->getMessage(), 0, $e);
+            throw new AIException('Error processing Anthropic response: '.$e->getMessage(), 0, $e);
         }
     }
 
     /**
      * Set the model.
      *
-     * @param string $model
      * @return $this
      */
     public function setModel(string $model): self
     {
         $this->model = $model;
+
         return $this;
     }
 
     /**
      * Set the temperature.
      *
-     * @param float $temperature
      * @return $this
      */
     public function setTemperature(float $temperature): self
     {
         $this->temperature = $temperature;
+
         return $this;
     }
 
     /**
      * Set the max tokens.
      *
-     * @param int $maxTokens
      * @return $this
      */
     public function setMaxTokens(int $maxTokens): self
     {
         $this->maxTokens = $maxTokens;
+
         return $this;
     }
 
     /**
      * Validate the configuration.
-     *
-     * @return bool
      */
     public function validateConfig(): bool
     {
-        return !empty($this->config['api_key']);
+        return ! empty($this->config['api_key']);
     }
 }

@@ -28,4 +28,3 @@ class Homa extends Facade
         return 'homa';
     }
 }
-
