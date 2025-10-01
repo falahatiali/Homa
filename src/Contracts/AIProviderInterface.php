@@ -3,13 +3,18 @@
 namespace Homa\Contracts;
 
 use Homa\Response\AIResponse;
+use Homa\ValueObjects\MessageCollection;
+use Homa\ValueObjects\RequestOptions;
 
 interface AIProviderInterface
 {
     /**
      * Send a message to the AI and get a response.
+     *
+     * @param  MessageCollection|array  $messages  The messages to send (supports backward compatibility)
+     * @param  RequestOptions|array|null  $options  Request options (supports backward compatibility)
      */
-    public function sendMessage(array $messages, array $options = []): AIResponse;
+    public function sendMessage(MessageCollection|array $messages, RequestOptions|array|null $options = null): AIResponse;
 
     /**
      * Set the model to use for this provider.
