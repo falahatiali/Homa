@@ -73,7 +73,7 @@ class ProviderFactoryTest extends TestCase
         {
             public function __construct(array $config = []) {}
 
-            public function sendMessage(array $messages, array $options = []): \Homa\Response\AIResponse
+            public function sendMessage(\Homa\ValueObjects\MessageCollection|array $messages, \Homa\ValueObjects\RequestOptions|array|null $options = null): \Homa\Response\AIResponse
             {
                 return new \Homa\Response\AIResponse('test');
             }
