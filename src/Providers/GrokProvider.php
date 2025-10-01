@@ -2,8 +2,9 @@
 
 namespace Homa\Providers;
 
-use GrokPHP\Client\Client;
+use GrokPHP\Client\Clients\GrokClient;
 use GrokPHP\Client\Config\ChatOptions;
+use GrokPHP\Client\Config\GrokConfig;
 use GrokPHP\Client\Enums\Model;
 use GrokPHP\Client\Exceptions\GrokException;
 use Homa\Contracts\AIProviderInterface;
@@ -23,7 +24,7 @@ class GrokProvider implements AIProviderInterface
     /**
      * The Grok client instance.
      */
-    protected Client $client;
+    protected GrokClient $client;
 
     /**
      * Provider configuration.
@@ -57,8 +58,14 @@ class GrokProvider implements AIProviderInterface
         $this->temperature = $config['temperature'] ?? 0.7;
         $this->maxTokens = $config['max_tokens'] ?? 1000;
 
-        // Initialize Grok client
-        $this->client = new Client($config['api_key']);
+        // Initialize Grok client with proper config
+        $grokConfig = new GrokConfig(
+            apiKey: $config['api_key'],
+            baseUri: $config['base_uri'] ?? 'https://api.x.ai/v1',
+            timeout: $config['timeout'] ?? 30
+        );
+
+        $this->client = new GrokClient($grokConfig);
     }
 
     /**
@@ -88,7 +95,6 @@ class GrokProvider implements AIProviderInterface
             $chatOptions = new ChatOptions(
                 model: $this->getGrokModel($optionsArray['model'] ?? $this->model),
                 temperature: $optionsArray['temperature'] ?? $this->temperature,
-                maxTokens: $optionsArray['max_tokens'] ?? $this->maxTokens,
                 stream: $optionsArray['stream'] ?? false
             );
 
@@ -96,14 +102,14 @@ class GrokProvider implements AIProviderInterface
             $response = $this->client->chat($messagesArray, $chatOptions);
 
             return new AIResponse(
-                content: $response->content(),
-                model: $response->model(),
+                content: $response['choices'][0]['message']['content'] ?? '',
+                model: $response['model'] ?? $this->model,
                 usage: [
-                    'prompt_tokens' => $response->usage()['prompt_tokens'] ?? 0,
-                    'completion_tokens' => $response->usage()['completion_tokens'] ?? 0,
-                    'total_tokens' => $response->usage()['total_tokens'] ?? 0,
+                    'prompt_tokens' => $response['usage']['prompt_tokens'] ?? 0,
+                    'completion_tokens' => $response['usage']['completion_tokens'] ?? 0,
+                    'total_tokens' => $response['usage']['total_tokens'] ?? 0,
                 ],
-                raw: $response->toArray()
+                raw: $response
             );
         } catch (GrokException $e) {
             // Wrap Grok exceptions into our exception type
