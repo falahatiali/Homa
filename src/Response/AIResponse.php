@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelSage\Response;
+namespace Homa\Response;
 
 class AIResponse
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace LaravelSage\Providers;
+namespace Homa\Providers;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use LaravelSage\Contracts\AIProviderInterface;
-use LaravelSage\Exceptions\AIException;
-use LaravelSage\Response\AIResponse;
+use Homa\Contracts\AIProviderInterface;
+use Homa\Exceptions\AIException;
+use Homa\Response\AIResponse;
 
 class AnthropicProvider implements AIProviderInterface
 {

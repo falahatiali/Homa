@@ -1,16 +1,16 @@
 <?php
 
-namespace LaravelSage\Manager;
+namespace Homa\Manager;
 
 use Illuminate\Foundation\Application;
 use InvalidArgumentException;
-use LaravelSage\Contracts\AIProviderInterface;
-use LaravelSage\Providers\AnthropicProvider;
-use LaravelSage\Providers\OpenAIProvider;
-use LaravelSage\Response\AIResponse;
-use LaravelSage\Conversation\Conversation;
+use Homa\Contracts\AIProviderInterface;
+use Homa\Providers\AnthropicProvider;
+use Homa\Providers\OpenAIProvider;
+use Homa\Response\AIResponse;
+use Homa\Conversation\Conversation;
 
-class SageManager
+class HomaManager
 {
     /**
      * The application instance.
@@ -34,7 +34,7 @@ class SageManager
     protected array $config = [];
 
     /**
-     * Create a new Sage Manager instance.
+     * Create a new Homa Manager instance.
      *
      * @param Application $app
      */
@@ -122,7 +122,7 @@ class SageManager
                 'role' => 'system',
                 'content' => $this->config['system_prompt'],
             ];
-        } elseif ($systemPrompt = config('sage.system_prompt')) {
+        } elseif ($systemPrompt = config('homa.system_prompt')) {
             $messages[] = [
                 'role' => 'system',
                 'content' => $systemPrompt,
@@ -172,7 +172,7 @@ class SageManager
     protected function getProvider(): AIProviderInterface
     {
         if (!$this->provider) {
-            $defaultProvider = config('sage.default', 'openai');
+            $defaultProvider = config('homa.default', 'openai');
             $this->provider = $this->createProvider($defaultProvider);
         }
 
@@ -188,7 +188,7 @@ class SageManager
      */
     protected function createProvider(string $provider): AIProviderInterface
     {
-        $config = config("sage.providers.{$provider}");
+        $config = config("homa.providers.{$provider}");
 
         if (!$config) {
             throw new InvalidArgumentException("Provider [{$provider}] is not configured.");

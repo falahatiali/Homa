@@ -1,8 +1,8 @@
 <?php
 
-namespace LaravelSage\Tests\Unit;
+namespace Homa\Tests\Unit;
 
-use LaravelSage\Response\AIResponse;
+use Homa\Response\AIResponse;
 use PHPUnit\Framework\TestCase;
 
 class AIResponseTest extends TestCase

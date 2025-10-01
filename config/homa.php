@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'default' => env('SAGE_PROVIDER', 'openai'),
+    'default' => env('HOMA_PROVIDER', 'openai'),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,7 +56,7 @@ return [
     |
     */
 
-    'system_prompt' => env('SAGE_SYSTEM_PROMPT', 'You are a helpful AI assistant.'),
+    'system_prompt' => env('HOMA_SYSTEM_PROMPT', 'You are a helpful AI assistant.'),
 
     /*
     |--------------------------------------------------------------------------
@@ -68,8 +68,8 @@ return [
     */
 
     'logging' => [
-        'enabled' => env('SAGE_LOGGING', false),
-        'channel' => env('SAGE_LOG_CHANNEL', 'stack'),
+        'enabled' => env('HOMA_LOGGING', false),
+        'channel' => env('HOMA_LOG_CHANNEL', 'stack'),
     ],
 
     /*
@@ -82,9 +82,9 @@ return [
     */
 
     'cache' => [
-        'enabled' => env('SAGE_CACHE_ENABLED', false),
-        'ttl' => env('SAGE_CACHE_TTL', 3600), // in seconds
-        'prefix' => 'sage_',
+        'enabled' => env('HOMA_CACHE_ENABLED', false),
+        'ttl' => env('HOMA_CACHE_TTL', 3600), // in seconds
+        'prefix' => 'homa_',
     ],
 
 ];

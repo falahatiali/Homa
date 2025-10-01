@@ -1,8 +1,8 @@
 <?php
 
-namespace LaravelSage\Contracts;
+namespace Homa\Contracts;
 
-use LaravelSage\Response\AIResponse;
+use Homa\Response\AIResponse;
 
 interface AIProviderInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelSage\Exceptions;
+namespace Homa\Exceptions;
 
 use Exception;
 

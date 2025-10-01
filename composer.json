@@ -1,6 +1,6 @@
 {
-    "name": "your-vendor/laravel-sage",
-    "description": "A simple and elegant AI assistant package for Laravel applications",
+    "name": "falahatiali/homa",
+    "description": "Homa - The legendary bird that brings AI wisdom to Laravel. A simple and elegant AI assistant package.",
     "keywords": [
         "laravel",
         "ai",
@@ -9,14 +9,16 @@
         "openai",
         "anthropic",
         "gpt",
-        "claude"
+        "claude",
+        "homa",
+        "persian"
     ],
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "Your Name",
-            "email": "your.email@example.com"
+            "name": "Fali",
+            "email": "falaahatiali@gmail.com"
         }
     ],
     "require": {
@@ -31,21 +33,21 @@
     },
     "autoload": {
         "psr-4": {
-            "LaravelSage\\": "src/"
+            "Homa\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "LaravelSage\\Tests\\": "tests/"
+            "Homa\\Tests\\": "tests/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "LaravelSage\\SageServiceProvider"
+                "Homa\\HomaServiceProvider"
             ],
             "aliases": {
-                "Sage": "LaravelSage\\Facades\\Sage"
+                "Homa": "Homa\\Facades\\Homa"
             }
         }
     },

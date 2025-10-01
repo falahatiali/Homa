@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelSage\Conversation;
+namespace Homa\Conversation;
 
-use LaravelSage\Contracts\AIProviderInterface;
-use LaravelSage\Response\AIResponse;
+use Homa\Contracts\AIProviderInterface;
+use Homa\Response\AIResponse;
 
 class Conversation
 {
@@ -45,7 +45,7 @@ class Conversation
                 'role' => 'system',
                 'content' => $config['system_prompt'],
             ];
-        } elseif ($systemPrompt = config('sage.system_prompt')) {
+        } elseif ($systemPrompt = config('homa.system_prompt')) {
             $this->messages[] = [
                 'role' => 'system',
                 'content' => $systemPrompt,

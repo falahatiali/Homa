@@ -6,7 +6,7 @@
          failOnRisky="true"
          failOnWarning="true">
     <testsuites>
-        <testsuite name="Laravel Sage Test Suite">
+        <testsuite name="Homa Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
