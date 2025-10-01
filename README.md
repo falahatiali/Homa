@@ -5,6 +5,8 @@
   
   **The legendary bird that brings AI wisdom to Laravel.**
   
+  [![Tests](https://github.com/falahatiali/homa/actions/workflows/tests.yml/badge.svg)](https://github.com/falahatiali/homa/actions/workflows/tests.yml)
+  [![Code Quality](https://github.com/falahatiali/homa/actions/workflows/code-quality.yml/badge.svg)](https://github.com/falahatiali/homa/actions/workflows/code-quality.yml)
   [![Latest Version](https://img.shields.io/packagist/v/falahatiali/homa.svg?style=flat-square)](https://packagist.org/packages/falahatiali/homa)
   [![Total Downloads](https://img.shields.io/packagist/dt/falahatiali/homa.svg?style=flat-square)](https://packagist.org/packages/falahatiali/homa)
   [![License](https://img.shields.io/packagist/l/falahatiali/homa.svg?style=flat-square)](https://packagist.org/packages/falahatiali/homa)
@@ -20,10 +22,13 @@ Homa is a simple and elegant AI assistant package for Laravel applications. Inte
 - 🔌 **Multiple AI Providers** - Support for OpenAI (GPT-4, GPT-3.5) and Anthropic (Claude)
 - 💬 **Conversation Management** - Built-in context-aware multi-turn conversations
 - ⚙️ **Highly Configurable** - Extensive configuration options for every use case
-- 🧪 **Fully Tested** - Comprehensive test suite with PHPUnit
+- 🧪 **Fully Tested** - Comprehensive test suite with CI/CD pipeline
 - 📦 **Zero Configuration** - Works out of the box with sensible defaults
-- 🎯 **Extensible** - Easy to add custom AI providers
+- 🎯 **Extensible** - Easy to add custom AI providers via Factory Pattern
 - 🔒 **Type Safe** - Full PHP 8.1+ type hints and return types
+- 🏗️ **SOLID Principles** - Clean architecture following best practices
+- ⚡ **Production Ready** - Uses official OpenAI PHP client for reliability
+- 🔍 **Code Quality** - PHPStan level 5 + Laravel Pint for consistency
 
 ## 📋 Requirements
 
