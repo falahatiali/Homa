@@ -19,7 +19,7 @@ Homa is a simple and elegant AI assistant package for Laravel applications. Inte
 ## ✨ Features
 
 - 🦅 **Simple, Fluent API** - Elegant interface inspired by Laravel's design philosophy
-- 🔌 **Multiple AI Providers** - Support for OpenAI (GPT-4, GPT-3.5) and Anthropic (Claude)
+- 🔌 **Multiple AI Providers** - Support for OpenAI (GPT-4, GPT-3.5), Anthropic (Claude), Grok, and Groq
 - 💬 **Conversation Management** - Built-in context-aware multi-turn conversations
 - ⚙️ **Highly Configurable** - Extensive configuration options for every use case
 - 🧪 **Fully Tested** - 70 tests with 135 assertions covering all critical paths
@@ -52,22 +52,65 @@ php artisan vendor:publish --tag=homa-config
 
 This will create a `config/homa.php` configuration file.
 
+### Quick Setup
+
+1. **Copy environment file:**
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Add your API keys to `.env`:**
+   ```env
+   HOMA_PROVIDER=openai
+   OPENAI_API_KEY=sk-your-actual-api-key
+   ```
+
+3. **Start using Homa:**
+   ```php
+   use Homa\Facades\Homa;
+   $response = Homa::ask('Hello!');
+   ```
+
 ### Configure Your API Keys
 
-Add your AI provider API keys to your `.env` file:
+Copy the example environment file and add your AI provider API keys:
+
+```bash
+# Copy the example environment file
+cp .env.example .env
+
+# Edit with your actual API keys
+nano .env
+```
+
+**Required Environment Variables:**
 
 ```env
-# Choose your default provider (openai or anthropic)
+# Choose your default provider (openai, anthropic, grok, or groq)
 HOMA_PROVIDER=openai
 
 # OpenAI Configuration
-OPENAI_API_KEY=your-openai-api-key
+OPENAI_API_KEY=sk-your-openai-api-key-here
 OPENAI_MODEL=gpt-4
 
 # Anthropic Configuration  
-ANTHROPIC_API_KEY=your-anthropic-api-key
+ANTHROPIC_API_KEY=sk-ant-your-anthropic-api-key-here
 ANTHROPIC_MODEL=claude-3-5-sonnet-20241022
+
+# Grok Configuration
+GROK_API_KEY=xai-your-grok-api-key-here
+GROK_MODEL=grok-2
+
+# Groq Configuration (Ultra-fast inference)
+GROQ_API_KEY=gsk_your-groq-api-key-here
+GROQ_MODEL=openai/gpt-oss-20b
 ```
+
+**Get API Keys:**
+- **OpenAI**: [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+- **Anthropic**: [console.anthropic.com](https://console.anthropic.com/)
+- **Grok**: [console.x.ai](https://console.x.ai/)
+- **Groq**: [console.groq.com](https://console.groq.com/)
 
 ## 🚀 Quick Start
 
@@ -108,6 +151,11 @@ $openaiResponse = Homa::provider('openai')
 // Use Anthropic Claude
 $claudeResponse = Homa::provider('anthropic')
     ->model('claude-3-5-sonnet-20241022')
+    ->ask('What is Laravel?');
+
+// Use Groq (Ultra-fast inference)
+$groqResponse = Homa::provider('groq')
+    ->model('openai/gpt-oss-20b')
     ->ask('What is Laravel?');
 ```
 
@@ -188,7 +236,7 @@ echo $response; // Automatically calls content()
 
 ### Configuration File
 
-After publishing the config file, you can customize all aspects in `config/homa.php`:
+After publishing the config file, you can customize all aspects in `config/homa.php`. For environment variables, see `.env.example` for all available options:
 
 ```php
 return [
@@ -212,6 +260,20 @@ return [
             'temperature' => env('ANTHROPIC_TEMPERATURE', 0.7),
             'max_tokens' => env('ANTHROPIC_MAX_TOKENS', 1000),
             'timeout' => env('ANTHROPIC_TIMEOUT', 30),
+        ],
+        'grok' => [
+            'api_key' => env('GROK_API_KEY'),
+            'model' => env('GROK_MODEL', 'grok-2'),
+            'temperature' => env('GROK_TEMPERATURE', 0.7),
+            'max_tokens' => env('GROK_MAX_TOKENS', 1000),
+        ],
+        'groq' => [
+            'api_key' => env('GROQ_API_KEY'),
+            'api_url' => env('GROQ_API_URL', 'https://api.groq.com/openai/v1'),
+            'model' => env('GROQ_MODEL', 'openai/gpt-oss-20b'),
+            'temperature' => env('GROQ_TEMPERATURE', 0.7),
+            'max_tokens' => env('GROQ_MAX_TOKENS', 1000),
+            'timeout' => env('GROQ_TIMEOUT', 30),
         ],
     ],
 
@@ -245,6 +307,14 @@ return [
 - `claude-3-opus-20240229` - Most powerful for complex tasks
 - `claude-3-sonnet-20240229` - Balanced performance
 - `claude-3-haiku-20240307` - Fastest, most cost-effective
+
+**Groq (Ultra-fast inference):**
+- `openai/gpt-oss-20b` - Large, capable model
+- `openai/gpt-oss-7b` - Smaller, faster model
+- `llama-3.1-70b-versatile` - Meta's Llama model
+- `llama-3.1-8b-instant` - Fast Llama model
+- `mixtral-8x7b-32768` - Mixtral model
+- `gemma-7b-it` - Google's Gemma model
 
 ## 🎯 Use Cases
 

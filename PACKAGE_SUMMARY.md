@@ -109,6 +109,14 @@ OPENAI_MODEL=gpt-4
 ANTHROPIC_API_KEY=your-key-here
 ANTHROPIC_MODEL=claude-3-5-sonnet-20241022
 
+# Grok
+GROK_API_KEY=xai-your-key-here
+GROK_MODEL=grok-2
+
+# Groq (Ultra-fast inference)
+GROQ_API_KEY=gsk_your-key-here
+GROQ_MODEL=openai/gpt-oss-20b
+
 # System Prompt
 HOMA_SYSTEM_PROMPT="You are a helpful AI assistant."
 
@@ -120,6 +128,8 @@ HOMA_LOG_CHANNEL=stack
 HOMA_CACHE_ENABLED=false
 HOMA_CACHE_TTL=3600
 ```
+
+**💡 Tip**: Copy `.env.example` to `.env` and fill in your actual API keys!
 
 ## Next Steps
 
