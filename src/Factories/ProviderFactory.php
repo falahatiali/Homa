@@ -6,6 +6,7 @@ use Homa\Contracts\AIProviderInterface;
 use Homa\Exceptions\ConfigurationException;
 use Homa\Providers\AnthropicProvider;
 use Homa\Providers\GrokProvider;
+use Homa\Providers\GroqProvider;
 use Homa\Providers\OpenAIProvider;
 use InvalidArgumentException;
 
@@ -24,6 +25,7 @@ class ProviderFactory
         'openai' => OpenAIProvider::class,
         'anthropic' => AnthropicProvider::class,
         'grok' => GrokProvider::class,
+        'groq' => GroqProvider::class,
     ];
 
     /**

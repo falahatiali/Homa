@@ -51,6 +51,15 @@ return [
             'temperature' => env('GROK_TEMPERATURE', 0.7),
             'max_tokens' => env('GROK_MAX_TOKENS', 1000),
         ],
+
+        'groq' => [
+            'api_key' => env('GROQ_API_KEY'),
+            'api_url' => env('GROQ_API_URL', 'https://api.groq.com/openai/v1'),
+            'model' => env('GROQ_MODEL', 'openai/gpt-oss-20b'),
+            'temperature' => env('GROQ_TEMPERATURE', 0.7),
+            'max_tokens' => env('GROQ_MAX_TOKENS', 1000),
+            'timeout' => env('GROQ_TIMEOUT', 30),
+        ],
     ],
 
     /*
