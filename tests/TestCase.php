@@ -35,5 +35,11 @@ abstract class TestCase extends Orchestra
             'api_url' => 'https://api.openai.com/v1',
             'model' => 'gpt-4',
         ]);
+        
+        $app['config']->set('homa.providers.groq', [
+            'api_key' => 'test-key',
+            'api_url' => 'https://api.groq.com/openai/v1',
+            'model' => 'openai/gpt-oss-20b',
+        ]);
     }
 }
