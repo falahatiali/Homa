@@ -113,26 +113,52 @@ class GeminiProvider implements AIProviderInterface
 
             // Convert messages to Gemini format (just user messages)
             $contents = $this->formatMessagesForGemini($messagesArray);
+            
+            // Ensure we have content to send
+            if (empty(trim($contents))) {
+                throw new AIException('No content to send to Gemini');
+            }
 
             // Generate content (pass as variadic arguments)
             $response = $model->generateContent($contents);
 
-            return new AIResponse(
-                content: $response->text() ?? '',
-                model: $optionsArray['model'] ?? $this->model,
-                usage: [
+            // Extract response safely
+            $content = '';
+            $usage = [];
+            
+            try {
+                $content = $response->text() ?? '';
+            } catch (\Exception $e) {
+                // If text() fails, try to get raw content
+                $content = '';
+            }
+            
+            try {
+                $usage = [
                     'prompt_tokens' => $response->usageMetadata->promptTokenCount ?? 0,
                     'completion_tokens' => $response->usageMetadata->candidatesTokenCount ?? 0,
                     'total_tokens' => $response->usageMetadata->totalTokenCount ?? 0,
-                ],
-                raw: [
-                    'response' => $response->toArray(),
-                    'model' => $optionsArray['model'] ?? $this->model,
-                ]
+                ];
+            } catch (\Exception $e) {
+                $usage = [];
+            }
+            
+            return new AIResponse(
+                content: $content,
+                model: $optionsArray['model'] ?? $this->model,
+                usage: $usage,
+                raw: []
             );
         } catch (\Gemini\Exceptions\ErrorException $e) {
             throw new AIException(
                 "Gemini API Error: {$e->getMessage()}",
+                $e->getCode(),
+                $e
+            );
+        } catch (\Gemini\Exceptions\UnserializableResponse $e) {
+            // This usually means invalid API key or invalid response from API
+            throw new AIException(
+                "Gemini API Response Error: {$e->getMessage()}. Please check your API key and request format.",
                 $e->getCode(),
                 $e
             );
