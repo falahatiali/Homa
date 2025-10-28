@@ -5,6 +5,7 @@ namespace Homa\Factories;
 use Homa\Contracts\AIProviderInterface;
 use Homa\Exceptions\ConfigurationException;
 use Homa\Providers\AnthropicProvider;
+use Homa\Providers\GeminiProvider;
 use Homa\Providers\GrokProvider;
 use Homa\Providers\GroqProvider;
 use Homa\Providers\OpenAIProvider;
@@ -26,6 +27,7 @@ class ProviderFactory
         'anthropic' => AnthropicProvider::class,
         'grok' => GrokProvider::class,
         'groq' => GroqProvider::class,
+        'gemini' => GeminiProvider::class,
     ];
 
     /**

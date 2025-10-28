@@ -60,6 +60,15 @@ return [
             'max_tokens' => env('GROQ_MAX_TOKENS', 1000),
             'timeout' => env('GROQ_TIMEOUT', 30),
         ],
+
+        'gemini' => [
+            'api_key' => env('GEMINI_API_KEY'),
+            'base_uri' => env('GEMINI_BASE_URI', 'https://generativelanguage.googleapis.com/v1beta'),
+            'model' => env('GEMINI_MODEL', 'gemini-2.0-flash-exp'),
+            'temperature' => env('GEMINI_TEMPERATURE', 0.7),
+            'max_tokens' => env('GEMINI_MAX_TOKENS', 1000),
+            'timeout' => env('GEMINI_TIMEOUT', 30),
+        ],
     ],
 
     /*
