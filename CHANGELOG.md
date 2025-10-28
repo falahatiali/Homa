@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Gemini Provider Support** - Google AI with multimodal capabilities
 - **Groq Provider Support** - Ultra-fast AI inference with OpenAI-compatible API
 - **Multiple Groq Models** - Support for GPT-OSS, Llama, Mixtral, and Gemma models
 - **Comprehensive Environment Template** - Complete .env.example with all providers
@@ -16,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Performance Comparison** - Tools to compare speed between different providers
 
 ### Changed
-- **Provider Count** - Now supports 4 AI providers (OpenAI, Anthropic, Grok, Groq)
+- **Provider Count** - Now supports 5 AI providers (OpenAI, Anthropic, Grok, Groq, Gemini)
 - **Configuration** - Enhanced config/homa.php with Groq settings
 - **Documentation** - Improved setup instructions and provider comparison
 
