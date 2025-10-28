@@ -90,20 +90,23 @@ class GeminiProvider implements AIProviderInterface
             // Extract system prompt if present
             $systemPrompt = $this->extractSystemPrompt($messagesArray);
             
+            // Create the model
             $model = $this->client->generativeModel(
                 model: $optionsArray['model'] ?? $this->model
             );
+            
+            // Add system instruction if present (must be a Content object)
+            if ($systemPrompt) {
+                $model = $model->withSystemInstruction(
+                    \Gemini\Data\Content::parse($systemPrompt)
+                );
+            }
 
-            // Build configuration
+            // Build generation configuration
             $config = [
                 'temperature' => $optionsArray['temperature'] ?? $this->temperature,
                 'maxOutputTokens' => $optionsArray['max_tokens'] ?? $this->maxTokens,
             ];
-
-            // Add system instruction if present
-            if ($systemPrompt) {
-                $config['systemInstruction'] = $systemPrompt;
-            }
 
             // Convert messages to Gemini format (just user messages)
             $contents = $this->formatMessagesForGemini($messagesArray);
