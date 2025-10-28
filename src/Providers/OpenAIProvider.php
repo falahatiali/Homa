@@ -86,11 +86,17 @@ class OpenAIProvider implements AIProviderInterface
         };
 
         try {
+            $model = $optionsArray['model'] ?? $this->model;
+            $maxTokens = $optionsArray['max_tokens'] ?? $this->maxTokens;
+            
+            // GPT-5 models use max_completion_tokens instead of max_tokens
+            $tokenParam = $this->isGpt5Model($model) ? 'max_completion_tokens' : 'max_tokens';
+            
             $response = $this->client->chat()->create([
-                'model' => $optionsArray['model'] ?? $this->model,
+                'model' => $model,
                 'messages' => $messagesArray,
                 'temperature' => $optionsArray['temperature'] ?? $this->temperature,
-                'max_tokens' => $optionsArray['max_tokens'] ?? $this->maxTokens,
+                $tokenParam => $maxTokens,
             ]);
 
             return new AIResponse(
@@ -117,6 +123,17 @@ class OpenAIProvider implements AIProviderInterface
                 $e
             );
         }
+    }
+
+    /**
+     * Check if the model is a GPT-5 model that requires max_completion_tokens.
+     *
+     * @param  string  $model
+     * @return bool
+     */
+    protected function isGpt5Model(string $model): bool
+    {
+        return str_starts_with($model, 'gpt-5') || str_starts_with($model, 'gpt-5o');
     }
 
     /**
@@ -153,6 +170,24 @@ class OpenAIProvider implements AIProviderInterface
         $this->maxTokens = $maxTokens;
 
         return $this;
+    }
+
+    /**
+     * Get available OpenAI models.
+     *
+     * @return array
+     */
+    public function getAvailableModels(): array
+    {
+        return [
+            'gpt-5',
+            'gpt-5o',
+            'gpt-4o',
+            'gpt-4o-mini',
+            'gpt-4-turbo',
+            'gpt-4',
+            'gpt-3.5-turbo',
+        ];
     }
 
     /**

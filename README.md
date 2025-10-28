@@ -19,7 +19,7 @@ Homa is a simple and elegant AI assistant package for Laravel applications. Inte
 ## ✨ Features
 
 - 🦅 **Simple, Fluent API** - Elegant interface inspired by Laravel's design philosophy
-- 🔌 **Multiple AI Providers** - Support for OpenAI (GPT-4, GPT-3.5), Anthropic (Claude), Grok, Groq, and Google Gemini
+- 🔌 **Multiple AI Providers** - Support for OpenAI (GPT-4, GPT-3.5), Anthropic (Claude), Grok, Groq, Google Gemini, and Ollama (local)
 - 💬 **Conversation Management** - Built-in context-aware multi-turn conversations
 - ⚙️ **Highly Configurable** - Extensive configuration options for every use case
 - 🧪 **Fully Tested** - 70 tests with 135 assertions covering all critical paths
@@ -86,7 +86,7 @@ nano .env
 **Required Environment Variables:**
 
 ```env
-# Choose your default provider (openai, anthropic, grok, groq, or gemini)
+# Choose your default provider (openai, anthropic, grok, groq, gemini, ollama)
 HOMA_PROVIDER=openai
 
 # OpenAI Configuration
@@ -108,6 +108,10 @@ GROQ_MODEL=openai/gpt-oss-20b
 # Gemini Configuration (Google AI with multimodal)
 GEMINI_API_KEY=your-gemini-api-key-here
 GEMINI_MODEL=gemini-2.0-flash-exp
+
+# Ollama (Local, free)
+OLLAMA_API_URL=http://localhost:11434
+OLLAMA_MODEL=llama3
 ```
 
 **Get API Keys:**
@@ -116,6 +120,41 @@ GEMINI_MODEL=gemini-2.0-flash-exp
 - **Grok**: [console.x.ai](https://console.x.ai/)
 - **Groq**: [console.groq.com](https://console.groq.com/)
 - **Gemini**: [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
+
+### 🖥️ Use Ollama locally (free)
+
+Ollama lets you run models like Llama 3, Mistral, Qwen locally with no API cost.
+
+1) Install Ollama
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh    # macOS/Linux
+# Windows: download installer at https://ollama.com/download
+```
+
+2) Download and run a model
+
+```bash
+ollama run llama3               # or: mistral:7b-instruct, qwen2.5:7b-instruct
+```
+
+3) Configure Homa for Ollama
+
+```env
+HOMA_PROVIDER=ollama
+OLLAMA_API_URL=http://localhost:11434
+OLLAMA_MODEL=llama3
+```
+
+4) Use in code
+
+```php
+$response = Homa::provider('ollama')->ask('Explain Laravel service container.');
+echo $response->content();
+```
+
+Best local models (balanced): `llama3.1:8b-instruct`, `mistral:7b-instruct`, `qwen2.5:7b-instruct`, `phi3:mini`.
+Browse models: `https://ollama.com/library` and curated lists at `https://llm-explorer.com/`.
 
 ## 🚀 Quick Start
 
@@ -316,8 +355,12 @@ return [
 ### Available Models
 
 **OpenAI:**
+- `gpt-5` - Latest, most advanced model
+- `gpt-5o` - Optimized GPT-5 variant
+- `gpt-4o` - Latest GPT-4 with vision capabilities
+- `gpt-4o-mini` - Smaller, faster GPT-4o
+- `gpt-4-turbo` - Fast GPT-4 variant
 - `gpt-4` - Most capable, best for complex tasks
-- `gpt-4-turbo-preview` - Faster GPT-4 variant
 - `gpt-3.5-turbo` - Fast and cost-effective
 
 **Anthropic:**

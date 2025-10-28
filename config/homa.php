@@ -69,6 +69,14 @@ return [
             'max_tokens' => env('GEMINI_MAX_TOKENS', 1000),
             'timeout' => env('GEMINI_TIMEOUT', 30),
         ],
+
+        'ollama' => [
+            'api_url' => env('OLLAMA_API_URL', 'http://localhost:11434'),
+            'model' => env('OLLAMA_MODEL', 'llama3'),
+            'temperature' => env('OLLAMA_TEMPERATURE', 0.7),
+            'max_tokens' => env('OLLAMA_MAX_TOKENS', 1024),
+            'timeout' => env('OLLAMA_TIMEOUT', 30),
+        ],
     ],
 
     /*

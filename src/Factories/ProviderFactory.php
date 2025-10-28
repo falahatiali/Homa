@@ -9,6 +9,7 @@ use Homa\Providers\GeminiProvider;
 use Homa\Providers\GrokProvider;
 use Homa\Providers\GroqProvider;
 use Homa\Providers\OpenAIProvider;
+use Homa\Providers\OllamaProvider;
 use InvalidArgumentException;
 
 /**
@@ -28,6 +29,7 @@ class ProviderFactory
         'grok' => GrokProvider::class,
         'groq' => GroqProvider::class,
         'gemini' => GeminiProvider::class,
+        'ollama' => OllamaProvider::class,
     ];
 
     /**
