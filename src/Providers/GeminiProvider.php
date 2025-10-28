@@ -87,6 +87,9 @@ class GeminiProvider implements AIProviderInterface
         };
 
         try {
+            // Extract system prompt if present
+            $systemPrompt = $this->extractSystemPrompt($messagesArray);
+            
             $model = $this->client->generativeModel(
                 model: $optionsArray['model'] ?? $this->model
             );
@@ -97,7 +100,12 @@ class GeminiProvider implements AIProviderInterface
                 'maxOutputTokens' => $optionsArray['max_tokens'] ?? $this->maxTokens,
             ];
 
-            // Convert messages to Gemini format
+            // Add system instruction if present
+            if ($systemPrompt) {
+                $config['systemInstruction'] = $systemPrompt;
+            }
+
+            // Convert messages to Gemini format (just user messages)
             $contents = $this->formatMessagesForGemini($messagesArray);
 
             // Generate content
@@ -132,6 +140,23 @@ class GeminiProvider implements AIProviderInterface
     }
 
     /**
+     * Extract system prompt from messages.
+     *
+     * @param  array  $messages
+     * @return string|null
+     */
+    protected function extractSystemPrompt(array $messages): ?string
+    {
+        foreach ($messages as $message) {
+            if (($message['role'] ?? 'user') === 'system') {
+                return $message['content'] ?? null;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Format messages for Gemini API.
      *
      * @param  array  $messages
@@ -139,21 +164,18 @@ class GeminiProvider implements AIProviderInterface
      */
     protected function formatMessagesForGemini(array $messages): string
     {
-        // Gemini accepts text input directly or structured content
-        // For simplicity, we'll concatenate user messages and system prompts
+        // Gemini accepts text input directly
+        // Extract only user messages (system is handled separately)
         $text = '';
 
         foreach ($messages as $message) {
             $role = $message['role'] ?? 'user';
             $content = $message['content'] ?? '';
 
-            if ($role === 'system') {
-                // Prepend system prompt
-                $text = $content . "\n\n" . $text;
-            } elseif ($role === 'user') {
+            // Only include user messages, skip system and assistant
+            if ($role === 'user') {
                 $text .= $content . "\n\n";
             }
-            // Skip assistant messages for single-turn requests
         }
 
         return trim($text);
