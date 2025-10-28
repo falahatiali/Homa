@@ -41,5 +41,11 @@ abstract class TestCase extends Orchestra
             'api_url' => 'https://api.groq.com/openai/v1',
             'model' => 'openai/gpt-oss-20b',
         ]);
+        
+        $app['config']->set('homa.providers.gemini', [
+            'api_key' => 'test-key',
+            'base_uri' => 'https://generativelanguage.googleapis.com/v1beta',
+            'model' => 'gemini-2.0-flash-exp',
+        ]);
     }
 }
