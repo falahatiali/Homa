@@ -93,6 +93,11 @@ $response = Homa::provider('openai')
 $response = Homa::provider('anthropic')
     ->model('claude-3-5-sonnet-20241022')
     ->ask('Question');
+
+// Use Gemini
+$response = Homa::provider('gemini')
+    ->model('gemini-2.0-flash-exp')
+    ->ask('Question');
 ```
 
 ## Environment Variables
@@ -116,6 +121,10 @@ GROK_MODEL=grok-2
 # Groq (Ultra-fast inference)
 GROQ_API_KEY=gsk_your-key-here
 GROQ_MODEL=openai/gpt-oss-20b
+
+# Gemini (Google AI)
+GEMINI_API_KEY=your-key-here
+GEMINI_MODEL=gemini-2.0-flash-exp
 
 # System Prompt
 HOMA_SYSTEM_PROMPT="You are a helpful AI assistant."

@@ -19,7 +19,7 @@ Homa is a simple and elegant AI assistant package for Laravel applications. Inte
 ## ✨ Features
 
 - 🦅 **Simple, Fluent API** - Elegant interface inspired by Laravel's design philosophy
-- 🔌 **Multiple AI Providers** - Support for OpenAI (GPT-4, GPT-3.5), Anthropic (Claude), Grok, and Groq
+- 🔌 **Multiple AI Providers** - Support for OpenAI (GPT-4, GPT-3.5), Anthropic (Claude), Grok, Groq, and Google Gemini
 - 💬 **Conversation Management** - Built-in context-aware multi-turn conversations
 - ⚙️ **Highly Configurable** - Extensive configuration options for every use case
 - 🧪 **Fully Tested** - 70 tests with 135 assertions covering all critical paths
@@ -86,7 +86,7 @@ nano .env
 **Required Environment Variables:**
 
 ```env
-# Choose your default provider (openai, anthropic, grok, or groq)
+# Choose your default provider (openai, anthropic, grok, groq, or gemini)
 HOMA_PROVIDER=openai
 
 # OpenAI Configuration
@@ -104,6 +104,10 @@ GROK_MODEL=grok-2
 # Groq Configuration (Ultra-fast inference)
 GROQ_API_KEY=gsk_your-groq-api-key-here
 GROQ_MODEL=openai/gpt-oss-20b
+
+# Gemini Configuration (Google AI with multimodal)
+GEMINI_API_KEY=your-gemini-api-key-here
+GEMINI_MODEL=gemini-2.0-flash-exp
 ```
 
 **Get API Keys:**
@@ -111,6 +115,7 @@ GROQ_MODEL=openai/gpt-oss-20b
 - **Anthropic**: [console.anthropic.com](https://console.anthropic.com/)
 - **Grok**: [console.x.ai](https://console.x.ai/)
 - **Groq**: [console.groq.com](https://console.groq.com/)
+- **Gemini**: [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
 
 ## 🚀 Quick Start
 
@@ -156,6 +161,11 @@ $claudeResponse = Homa::provider('anthropic')
 // Use Groq (Ultra-fast inference)
 $groqResponse = Homa::provider('groq')
     ->model('openai/gpt-oss-20b')
+    ->ask('What is Laravel?');
+
+// Use Gemini (Google AI with multimodal)
+$geminiResponse = Homa::provider('gemini')
+    ->model('gemini-2.0-flash-exp')
     ->ask('What is Laravel?');
 ```
 
@@ -275,6 +285,14 @@ return [
             'max_tokens' => env('GROQ_MAX_TOKENS', 1000),
             'timeout' => env('GROQ_TIMEOUT', 30),
         ],
+        'gemini' => [
+            'api_key' => env('GEMINI_API_KEY'),
+            'base_uri' => env('GEMINI_BASE_URI', 'https://generativelanguage.googleapis.com/v1beta'),
+            'model' => env('GEMINI_MODEL', 'gemini-2.0-flash-exp'),
+            'temperature' => env('GEMINI_TEMPERATURE', 0.7),
+            'max_tokens' => env('GEMINI_MAX_TOKENS', 1000),
+            'timeout' => env('GEMINI_TIMEOUT', 30),
+        ],
     ],
 
     // Default system prompt
@@ -315,6 +333,15 @@ return [
 - `llama-3.1-8b-instant` - Fast Llama model
 - `mixtral-8x7b-32768` - Mixtral model
 - `gemma-7b-it` - Google's Gemma model
+
+**Gemini (Google AI with multimodal capabilities):**
+- `gemini-2.0-flash-exp` - Latest, fastest (experimental)
+- `gemini-1.5-pro-latest` - Most capable
+- `gemini-1.5-flash-latest` - Balanced speed and capability
+- `gemini-1.5-pro` - Stable pro model
+- `gemini-1.5-flash` - Fast and efficient
+- `gemini-1.5-pro-002` - Versioned pro model
+- `gemini-1.5-flash-002` - Versioned flash model
 
 ## 🎯 Use Cases
 
