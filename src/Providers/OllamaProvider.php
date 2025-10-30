@@ -32,10 +32,24 @@ class OllamaProvider implements AIProviderInterface
         $this->temperature = $config['temperature'] ?? 0.7;
         $this->maxTokens = $config['max_tokens'] ?? 1024;
 
-        $this->http = new HttpClient([
+        $timeout = $config['timeout'] ?? 300;
+        // Use 0.0 for unlimited; or omit the key entirely if you prefer default behavior
+        $timeoutOption = ($timeout === 0 || $timeout === '0') ? 0.0 : (float) $timeout;
+
+        $clientOptions = [
             'base_uri' => $config['api_url'] ?? 'http://localhost:11434',
-            'timeout' => (float)($config['timeout'] ?? 30),
-        ]);
+            'connect_timeout' => isset($config['connect_timeout']) ? (float) $config['connect_timeout'] : 10.0,
+            'curl' => [
+                CURLOPT_TCP_NODELAY => true,
+                CURLOPT_BUFFERSIZE => 16384,
+            ],
+        ];
+
+        if ($timeoutOption !== null) {
+            $clientOptions['timeout'] = $timeoutOption;
+        }
+        
+        $this->http = new HttpClient($clientOptions);
     }
 
     public function sendMessage(MessageCollection|array $messages, RequestOptions|array|null $options = null): AIResponse
@@ -53,6 +67,8 @@ class OllamaProvider implements AIProviderInterface
             'options' => [
                 'temperature' => $optionsArray['temperature'] ?? $this->temperature,
                 'num_predict' => $optionsArray['max_tokens'] ?? $this->maxTokens,
+                'num_ctx' => $this->config['num_ctx'],
+                'num_thread' => $this->config['num_thread'],
             ],
             'stream' => false,
         ];
@@ -63,8 +79,9 @@ class OllamaProvider implements AIProviderInterface
             ]);
 
             $data = json_decode((string) $response->getBody(), true);
-            if (! is_array($data)) {
-                throw new AIException('Invalid response from Ollama.');
+            if (!is_array($data)) {
+                $raw = (string) $response->getBody();
+                throw new AIException('Invalid response from Ollama: ' . $raw);
             }
 
             $content = $data['message']['content'] ?? ($data['response'] ?? '');
@@ -151,5 +168,6 @@ class OllamaProvider implements AIProviderInterface
         ];
     }
 }
+
 
 
