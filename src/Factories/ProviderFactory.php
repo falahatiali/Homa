@@ -48,7 +48,8 @@ class ProviderFactory
 
         $config = $config ?? $this->getProviderConfig($provider);
 
-        if (empty($config['api_key'])) {
+        // Local providers like Ollama do not require an API key
+        if ($provider !== 'ollama' && empty($config['api_key'])) {
             throw new ConfigurationException(
                 "API key is required for provider [{$provider}]. ".
                 'Please set it in your configuration or environment variables.'
