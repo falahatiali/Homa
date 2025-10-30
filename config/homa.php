@@ -75,7 +75,12 @@ return [
             'model' => env('OLLAMA_MODEL', 'llama3'),
             'temperature' => env('OLLAMA_TEMPERATURE', 0.7),
             'max_tokens' => env('OLLAMA_MAX_TOKENS', 1024),
-            'timeout' => env('OLLAMA_TIMEOUT', 30),
+            'timeout' => env('OLLAMA_TIMEOUT', 300),
+            'connect_timeout' => (float) env('OLLAMA_CONNECT_TIMEOUT', 10),
+
+            // Provider tuning options
+            'num_ctx' => (int) env('OLLAMA_NUM_CTX', 2048),
+            'num_thread' => (int) env('OLLAMA_NUM_THREAD', 4),
         ],
     ],
 
