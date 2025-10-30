@@ -151,7 +151,6 @@ class OllamaProvider implements AIProviderInterface
 
     public function validateConfig(): bool
     {
-        // No API key required for local Ollama
         return true;
     }
 

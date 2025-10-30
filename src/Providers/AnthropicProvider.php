@@ -164,6 +164,6 @@ class AnthropicProvider implements AIProviderInterface
      */
     public function validateConfig(): bool
     {
-        return ! empty($this->config['api_key']);
+        return !empty($this->config['api_key']);
     }
 }
