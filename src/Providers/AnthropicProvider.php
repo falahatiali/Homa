@@ -51,7 +51,7 @@ class AnthropicProvider implements AIProviderInterface
             'base_uri' => $config['api_url'] ?? 'https://api.anthropic.com/v1/',
             'timeout' => $config['timeout'] ?? 30,
             'headers' => [
-                'x-api-key' => $config['api_key'],
+                'x-api-key' => $config['api_key'] ?? '',
                 'anthropic-version' => '2023-06-01',
                 'Content-Type' => 'application/json',
             ],

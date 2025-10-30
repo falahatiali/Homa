@@ -61,7 +61,7 @@ class GrokProvider implements AIProviderInterface
 
         // Initialize Grok client with proper config
         $grokConfig = new GrokConfig(
-            apiKey: $config['api_key'],
+            apiKey: $config['api_key'] ?? '',
             baseUri: $config['base_uri'] ?? 'https://api.x.ai/v1',
             timeout: $config['timeout'] ?? 30
         );

@@ -57,7 +57,7 @@ class GroqProvider implements AIProviderInterface
 
         // Use OpenAI client with Groq's base URL
         $this->client = OpenAI::factory()
-            ->withApiKey($config['api_key'])
+            ->withApiKey($config['api_key'] ?? '')
             ->withBaseUri($config['api_url'] ?? 'https://api.groq.com/openai/v1')
             ->withHttpHeader('User-Agent', 'Homa-Laravel-AI/1.0')
             ->make();

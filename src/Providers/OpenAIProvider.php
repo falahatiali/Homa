@@ -57,7 +57,7 @@ class OpenAIProvider implements AIProviderInterface
 
         // Use the official OpenAI PHP client
         $this->client = OpenAI::factory()
-            ->withApiKey($config['api_key'])
+            ->withApiKey($config['api_key'] ?? '')
             ->withHttpHeader('OpenAI-Beta', 'assistants=v1')
             ->withBaseUri($config['api_url'] ?? 'https://api.openai.com/v1')
             ->make();

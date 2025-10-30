@@ -57,7 +57,7 @@ class GeminiProvider implements AIProviderInterface
 
         // Initialize Gemini client
         $this->client = Gemini::factory()
-            ->withApiKey($config['api_key'])
+            ->withApiKey($config['api_key'] ?? '')
             ->withBaseUrl($config['base_uri'] ?? 'https://generativelanguage.googleapis.com/v1beta')
             ->make();
     }
