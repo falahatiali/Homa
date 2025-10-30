@@ -52,7 +52,11 @@ class ProviderFactory
         $instance = new $providerClass($config);
 
         if (method_exists($instance, 'validateConfig') && ! $instance->validateConfig()) {
-            throw new ConfigurationException("Invalid configuration for provider [{$provider}].");
+            $message = "Invalid configuration for provider [{$provider}].";
+            if (!array_key_exists('api_key', $config) || empty($config['api_key'])) {
+                $message = "API key is required for provider [{$provider}]. Please set it in your configuration or environment variables.";
+            }
+            throw new ConfigurationException($message);
         }
 
         return $instance;
